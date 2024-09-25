@@ -1,0 +1,65 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Restaurant Menu</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Menu</h1>
+        <div id="menuItems"></div>
+        <div id="cart">
+            <h2>Cart</h2>
+            <ul id="cartItems"></ul>
+            <p>Total: <span id="totalCost">0</span></p>
+            <button onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Restaurant Menu</h1>
+
+        <!-- <div class="input-group">
+            <input type="text" id="tableNumber" placeholder="Enter Table Number" />
+            <button onclick="generateQRCode()">Generate QR Code</button>
+        </div> -->
+
+        <!-- Add the search bar for food search -->
+        <div class="search-container">
+            <input type="text" id="foodSearch" placeholder="Search food..." oninput="searchFood()" />
+        </div>
+
+        <div id="menuItems"></div>
+        <p id="searchResult"></p>
+
+        <h2>Cart</h2>
+        <ul id="cartItems"></ul>
+        <p>Total: ₹<span id="totalCost">0</span></p>
+        <button onclick="placeOrder()">Place Order</button>
+
+        <h2>Order Status</h2>
+        <div id="orderStatus"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

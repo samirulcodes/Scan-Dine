@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Restaurant QR Code Generator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate QR Code for Your Table</h1>
+        <input type="number" id="tableNumber" placeholder="Enter Table Number (1, 2, 3)">
+        <button onclick="generateQRCode()">Generate QR Code</button>
+        <div id="qrCode" style="margin-top: 20px;"></div>
+        <p>Scan the QR code to view the menu and order food.</p>
+    </div>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+</body>
+</html>
+
+
+<!-- to run or book -->
+<!-- http://localhost:3000/menu.html?table=1 -->
