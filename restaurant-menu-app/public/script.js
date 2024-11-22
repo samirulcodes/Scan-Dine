@@ -315,3 +315,73 @@ function searchFood() {
 }
 
 window.onload = loadMenu;
+
+
+
+
+
+// Explanation
+
+// Data and Variables
+// cart and totalCost:
+
+// cart: An array to store the items that users add to their cart.
+// totalCost: A number to keep track of the total price of all items in the cart.
+
+// menuItems:
+// A dummy menu with some food items. Each item has an id, name, price, and a special flag to indicate if it's a special dish.
+
+// Functions
+// 1. Generate QR Code
+// generateQRCode():
+// Takes a table number entered by the user.
+// Creates a URL with the table number as a query parameter (e.g., http://localhost:3000/menu.html?table=1).
+// Generates a QR code for that URL.
+
+// 2. Load and Display Menu
+// loadMenu():
+// Divides menu items into special and regular items.
+// Dynamically displays them on the webpage with "Add to Cart" buttons.
+
+// 3. Add and Remove Items from Cart
+// addToCart(id):
+// Adds a selected food item to the cart. If it's already in the cart, it increases the quantity.
+// Updates the total cost.
+
+// removeFromCart(id):
+
+// Removes a selected item from the cart.
+// Reduces the total cost accordingly.
+
+// updateCart():
+// Refreshes the cart display (shows items, quantities, and a remove button).
+// Updates the total cost on the screen.
+
+// 4. Place an Order
+// placeOrder():
+// Ensures the cart is not empty before placing the order.
+// Confirms the order with the user.
+// Sends the order details (table number and cart items) to a server endpoint (/api/orders).
+// Clears the cart and resets the total cost after the order is placed.
+// Updates the order status on the screen (e.g., "Food is preparing").
+
+// 5. Update Order Status
+// updateOrderStatus():
+// Displays "Food is preparing" after the order is placed.
+// Changes the status to "Food is ready!" after 10 minutes.
+
+// 6. Search Functionality
+// searchFood():
+// Filters the menu items based on the user's search input.
+// Displays the matching items or shows "Not available" if no matches are found.
+
+// How It All Comes Together
+// When the webpage loads, the loadMenu() function displays the menu items.
+// Users can:
+    // Add items to the cart.
+    // View or remove items from the cart.
+    // Search for specific items.
+
+// Users can place an order after confirming the cart.
+// The app sends the order to the server and displays the preparation status.
+// A QR code can be generated to access the menu from a table-specific link.
