@@ -5,8 +5,11 @@ body {
     background: url('https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D') no-repeat center center fixed;
     background-size: cover;
     margin: 0;
-    padding: 20px;
     color: #db9292; /* Changed to dark gray for better visibility */
+}
+
+.admin-container {
+    margin-top: 50px; /* Add top margin to push it down from the very top */
 }
 
 .container {
@@ -146,52 +149,243 @@ ul {
     }
 }
 
-/* Admin Panel Styles */
-.date-filter {
+/* Admin Page Styles */
+.admin-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.admin-container h1 {
     text-align: center;
+    color: #333;
     margin-bottom: 20px;
 }
 
-.date-filter label,
-.date-filter input,
-.date-filter button {
-    margin-right: 10px;
-    padding: 8px;
-    border-radius: 4px;
+.admin-section {
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.main-content-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    gap: 20px;
+    justify-content: space-between; /* Distribute space between items */
+    background-color: #e0ffe0; /* Light green for debugging */
+}
+
+.admin-section.orders-section {
+    flex: 2; /* Orders section takes more space */
+    min-width: 400px; /* Ensure it doesn't get too small */
+    background-color: #ffe0e0; /* Light red for debugging */
+}
+
+.right-column {
+    flex: 1; /* Right column takes remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 300px; /* Ensure it doesn't get too small */
+    background-color: #e0e0ff; /* Light blue for debugging */
+}
+
+.admin-section.orders-section {
+    flex: 2; /* Orders section takes more space */
+    min-width: 400px; /* Ensure it doesn't get too small */
+}
+
+.right-column {
+    flex: 1; /* Right column takes remaining space */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 300px; /* Ensure it doesn't get too small */
+}
+
+.admin-section {
+    /* General styling for admin sections, flex properties handled by parent */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.admin-section h2 {
+    margin-top: 0;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.date-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-filter label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.date-filter input[type="date"],
+.date-filter select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
 }
 
 .date-filter button {
-    background-color: #007bff;
+    padding: 8px 15px;
+    background-color: #4CAF50;
     color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 1em;
 }
 
 .date-filter button:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
 }
 
 .order-card {
     background-color: #f9f9f9;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    color: #333; /* Ensure text in order cards is dark */
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    color: #333; /* Changed from white to dark gray */
 }
 
 .order-card h3 {
-    color: #333;
     margin-top: 0;
+    color: #333;
+}
+
+.order-card p {
+    margin: 5px 0;
 }
 
 .order-card ul {
-    list-style: inside;
+    list-style: none;
     padding: 0;
 }
 
-.order-card li {
+.order-card ul li {
+    margin-bottom: 3px;
+}
+
+.order-card .status-update-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.order-card .status-update-controls select {
+    padding: 5px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.order-card .status-update-controls button {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.order-card .status-update-controls button:hover {
+    background-color: #0056b3;
+}
+
+.order-card .delete-order-btn {
+    background-color: #dc3545;
+    margin-left: 10px;
+}
+
+.order-card .delete-order-btn:hover {
+    background-color: #c82333;
+}
+
+#sales-data ul,
+#top-items-data ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sales-data ul li,
+#top-items-data ul li {
+    background-color: #eee;
     margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#sales-data ul li span,
+#top-items-data ul li span {
+    font-weight: bold;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .menu-item {
+        flex-basis: 100%;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-item button {
+        margin-top: 5px;
+    }
+
+    .search-container input[type="text"] {
+        width: 100%;
+    }
+
+    .date-filter {
+        flex-direction: column;
+    }
+
+    .date-filter label,
+    .date-filter input[type="date"],
+    .date-filter select,
+    .date-filter button {
+        margin-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+    }
 }
 
 

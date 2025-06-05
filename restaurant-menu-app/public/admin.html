@@ -7,17 +7,41 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+     <div class="admin-container">
         <h1>Admin Panel - Received Orders</h1>
-        <div class="date-filter">
-            <label for="orderDate">Filter by Date:</label>
-            <input type="date" id="orderDate">
-            <button onclick="fetchOrders()">Filter</button>
+        <div class="main-content-wrapper">
+            <div class="admin-section orders-section">
+                <div class="date-filter">
+                    <label for="orderDate">Filter by Date:</label>
+                    <input type="date" id="orderDate">
+                    <button onclick="fetchOrders()">Filter</button>
+                </div>
+                <div id="orders-container"></div>
+            </div>
+
+            <div class="right-column">
+                <div class="admin-section sales-section">
+                    <h2>Sales Statistics</h2>
+                    <div class="date-filter">
+                        <label for="sales-period">Filter by:</label>
+                        <select id="sales-period">
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="year">Year</option>
+                        </select>
+                        <button id="fetch-sales-btn">Fetch Sales</button>
+                    </div>
+                    <div id="sales-data"></div>
+                </div>
+
+                <div class="admin-section top-items-section">
+                    <h2>Most Ordered Items</h2>
+                    <div id="top-items-data"></div>
+                </div>
+            </div>
         </div>
-        <div id="ordersList"></div>
     </div>
-    <!-- The original search block was JavaScript code intended for admin.js, not this HTML file. -->
-    <!-- The following line is kept as a placeholder, as the original search/replace operation cannot be applied here. -->
+
     <script src="admin.js"></script>
 </body>
 </html>

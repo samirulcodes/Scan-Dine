@@ -5,11 +5,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const dd = String(today.getDate()).padStart(2, '0');
     document.getElementById('orderDate').value = `${yyyy}-${mm}-${dd}`;
     fetchOrders();
+
+    document.getElementById('fetch-sales-btn').addEventListener('click', fetchSalesData);
 });
+
+async function fetchSalesData() {
+    const salesPeriod = document.getElementById('sales-period').value;
+    const salesDataContainer = document.getElementById('sales-data');
+    const topItemsDataContainer = document.getElementById('top-items-data');
+
+    salesDataContainer.innerHTML = 'Loading sales data...';
+    topItemsDataContainer.innerHTML = 'Loading top items data...';
+
+    try {
+        const salesResponse = await fetch(`/api/sales?period=${salesPeriod}`);
+        const sales = await salesResponse.json();
+        displaySalesData(sales);
+
+        const topItemsResponse = await fetch(`/api/top-items?period=${salesPeriod}`);
+        const topItems = await topItemsResponse.json();
+        displayTopItems(topItems);
+
+    } catch (error) {
+        console.error('Error fetching sales data:', error);
+        salesDataContainer.innerHTML = 'Failed to load sales data.';
+        topItemsDataContainer.innerHTML = 'Failed to load top items data.';
+    }
+}
+
+function displaySalesData(sales) {
+    const salesDataContainer = document.getElementById('sales-data');
+    salesDataContainer.innerHTML = '';
+
+    if (sales.length === 0) {
+        salesDataContainer.innerHTML = '<p>No sales data available for this period.</p>';
+        return;
+    }
+
+    const ul = document.createElement('ul');
+    sales.forEach(sale => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>Date: ${new Date(sale._id).toLocaleDateString()}</span> <span>Total Sales: $${sale.totalSales.toFixed(2)}</span>`;
+        ul.appendChild(li);
+    });
+    salesDataContainer.appendChild(ul);
+}
+
+function displayTopItems(topItems) {
+    const topItemsDataContainer = document.getElementById('top-items-data');
+    topItemsDataContainer.innerHTML = '';
+
+    if (topItems.length === 0) {
+        topItemsDataContainer.innerHTML = '<p>No top items data available for this period.</p>';
+        return;
+    }
+
+    const ul = document.createElement('ul');
+    topItems.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${item._id}</span> <span>Ordered: ${item.count} times</span>`;
+        ul.appendChild(li);
+    });
+    topItemsDataContainer.appendChild(ul);
+}
 
 async function fetchOrders() {
     const orderDate = document.getElementById('orderDate').value;
-    const ordersList = document.getElementById('ordersList');
+    const ordersList = document.getElementById('orders-container');
     ordersList.innerHTML = 'Loading orders...';
 
     try {

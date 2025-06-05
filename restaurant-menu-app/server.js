@@ -108,24 +108,90 @@ app.put('/api/orders/:id/status', async (req, res) => {
 });
 
 // DELETE endpoint to delete an order
+// Delete an order
 app.delete('/api/orders/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const deletedOrder = await Order.findByIdAndDelete(id);
         if (!deletedOrder) {
-            return res.status(404).send('Order not found');
+            return res.status(404).json({ message: 'Order not found' });
         }
-        res.status(200).send('Order deleted successfully');
+        res.status(200).json({ message: 'Order deleted successfully' });
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 
-// Serve the admin page
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+// API to get sales data
+app.get('/api/sales', async (req, res) => {
+    try {
+        const { period } = req.query;
+        let startDate;
+        const endDate = new Date();
+
+        switch (period) {
+            case 'week':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+                break;
+            case 'month':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+                break;
+            case 'year':
+                startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
+                break;
+            default:
+                return res.status(400).json({ message: 'Invalid period specified' });
+        }
+
+        const salesData = await Order.aggregate([
+            { $match: { createdAt: { $gte: startDate, $lte: endDate } } },
+            { $unwind: '$cart' },
+            { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, totalSales: { $sum: { $multiply: ['$cart.price', '$cart.quantity'] } } } },
+            { $sort: { _id: 1 } }
+        ]);
+
+        res.json(salesData);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
+// API to get most ordered items
+app.get('/api/top-items', async (req, res) => {
+    try {
+        const { period } = req.query;
+        let startDate;
+        const endDate = new Date();
+
+        switch (period) {
+            case 'week':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+                break;
+            case 'month':
+                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+                break;
+            case 'year':
+                startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
+                break;
+            default:
+                return res.status(400).json({ message: 'Invalid period specified' });
+        }
+
+        const topItems = await Order.aggregate([
+            { $match: { createdAt: { $gte: startDate, $lte: endDate } } },
+            { $unwind: '$cart' },
+            { $group: { _id: '$cart.name', count: { $sum: '$cart.quantity' } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.json(topItems);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

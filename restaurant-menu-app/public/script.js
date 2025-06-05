@@ -113,14 +113,23 @@ function placeOrder() {
     })
     .then(response => response.json())
     .then(data => {
-        alert('Order placed successfully!');
         if (data.order && data.order._id) {
             localStorage.setItem('lastOrderId', data.order._id);
-            updateOrderStatus(data.order._id);
+            document.getElementById('orderStatus').textContent = 'Order Placed Successfully';
+            // Introduce a small delay before fetching the actual status
+            setTimeout(() => {
+                updateOrderStatus(data.order._id);
+            }, 5000); // 5-second delay
+
+            // Clear cart after successful order
+            cart = [];
+            updateCartDisplay();
+            saveCart();
+
+            alert('Order placed successfully!');
+        } else {
+            alert('Failed to place order.');
         }
-        cart = [];
-        totalCost = 0;
-        updateCart();
     })
     .catch(error => console.error('Error:', error));
 }
@@ -137,6 +146,10 @@ async function updateOrderStatus(orderId) {
         const order = await response.json();
         if (order) {
             statusDiv.innerText = `Order Status: ${order.status}`;
+            // Set up polling to continuously update status
+            if (orderId) {
+                setInterval(() => updateOrderStatus(orderId), 5000); // Poll every 5 seconds
+            }
         } else {
             statusDiv.innerText = "Order not found.";
         }
