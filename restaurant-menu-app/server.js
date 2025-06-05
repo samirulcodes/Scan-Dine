@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const { Order, MenuItem } = require('./server/models');
 
 // API endpoint to save new order
 app.post('/api/orders', async (req, res) => {
@@ -172,6 +172,71 @@ app.get('/api/sales', async (req, res) => {
         ]);
 
         res.json(salesData);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// API endpoints for Menu Items
+
+// Add a new menu item
+app.post('/api/menu-items', async (req, res) => {
+    try {
+        const { name, description, price, category, available } = req.body;
+        const newItem = new MenuItem({ name, description, price, category, available });
+        await newItem.save();
+        res.status(201).json(newItem);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// Get all menu items
+app.get('/api/menu-items', async (req, res) => {
+    try {
+        const items = await MenuItem.find();
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get a single menu item by ID
+app.get('/api/menu-items/:id', async (req, res) => {
+    try {
+        const item = await MenuItem.findById(req.params.id);
+        if (!item) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+        res.json(item);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Update a menu item
+app.put('/api/menu-items/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedItem = await MenuItem.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+        res.json(updatedItem);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// Delete a menu item
+app.delete('/api/menu-items/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedItem = await MenuItem.findByIdAndDelete(id);
+        if (!deletedItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+        res.json({ message: 'Menu item deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

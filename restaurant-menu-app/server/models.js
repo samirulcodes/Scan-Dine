@@ -4,12 +4,23 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
     tableNumber: Number,
     cart: Array,
+    status: { type: String, default: 'Preparing' }, // Add this line
     createdAt: { type: Date, default: Date.now },
 });
 
 const Order = mongoose.model('Order', orderSchema);
 
-module.exports = Order;
+const menuItemSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    category: { type: String, required: true },
+    available: { type: Boolean, default: true }
+});
+
+const MenuItem = mongoose.model('MenuItem', menuItemSchema);
+
+module.exports = { Order, MenuItem };
 
 
 
@@ -31,8 +42,9 @@ module.exports = Order;
     // const Order = mongoose.model('Order', orderSchema);
     // Creates an "Order" model using the schema. The model lets you interact with the orders collection in the database (MongoDB automatically pluralizes the name).
 
-// Exports the Model:
-    // module.exports = Order;
+
+
+module.exports = { Order, MenuItem };
     // Makes the Order model available to other files. You can now use this model to:
         // Add new orders to the database.
         // Fetch orders.

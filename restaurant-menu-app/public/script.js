@@ -1,14 +1,7 @@
 
 let cart = [];
 let totalCost = 0;
-
-// Dummy menu items
-const menuItems = [
-    { id: 1, name: "Burger", price: 10, special: false },
-    { id: 2, name: "Pizza", price: 15, special: true },
-    { id: 3, name: "Pasta", price: 12, special: false },
-    { id: 4, name: "Steak", price: 25, special: true },
-];
+let menuItems = []; // This will now be populated from the API
 
 // Generate QR Code
 function generateQRCode() {
@@ -21,10 +14,22 @@ function generateQRCode() {
     }
 }
 
-function loadMenu() {
+async function loadMenu() {
+    try {
+        const response = await fetch('/api/menu-items');
+        menuItems = await response.json();
+        displayMenu(menuItems);
+    } catch (error) {
+        console.error('Error fetching menu items:', error);
+    }
+}
+
+function displayMenu(itemsToDisplay) {
     const menuDiv = document.getElementById("menuItems");
-    const specialItems = menuItems.filter(item => item.special);
-    const regularItems = menuItems.filter(item => !item.special);
+    menuDiv.innerHTML = ""; // Clear current menu display
+
+    const specialItems = itemsToDisplay.filter(item => item.special);
+    const regularItems = itemsToDisplay.filter(item => !item.special);
 
     // Display special items
     if (specialItems.length > 0) {
@@ -34,11 +39,11 @@ function loadMenu() {
             const div = document.createElement("div");
             div.innerHTML = `
                 <h3 class="special">${item.name} - ₹${item.price}</h3>
-                <button onclick="addToCart(${item.id})">Add to Cart</button>
+                <p>${item.description}</p>
+                <button onclick="addToCart('${item._id}')">Add to Cart</button>
             `;
-            specialDiv.appendChild(div);
+            menuDiv.appendChild(div);
         });
-        menuDiv.appendChild(specialDiv);
     }
 
     // Display regular items
@@ -49,16 +54,16 @@ function loadMenu() {
             const div = document.createElement("div");
             div.innerHTML = `
                 <h3>${item.name} - ₹${item.price}</h3>
-                <button onclick="addToCart(${item.id})">Add to Cart</button>
+                <p>${item.description}</p>
+                <button onclick="addToCart('${item._id}')">Add to Cart</button>
             `;
-            regularDiv.appendChild(div);
+            menuDiv.appendChild(div);
         });
-        menuDiv.appendChild(regularDiv);
     }
 }
 
 function addToCart(id) {
-    const item = menuItems.find(i => i.id === id);
+    const item = menuItems.find(i => i._id === id);
     const existingItem = cart.find(i => i.id === id);
 
     if (existingItem) {
@@ -72,7 +77,7 @@ function addToCart(id) {
 }
 
 function removeFromCart(id) {
-    const index = cart.findIndex(i => i.id === id);
+    const index = cart.findIndex(i => i._id === id);
     if (index > -1) {
         totalCost -= cart[index].price * cart[index].quantity;
         cart.splice(index, 1);
@@ -85,7 +90,7 @@ function updateCart() {
     cartItemsList.innerHTML = "";
     cart.forEach(item => {
         const li = document.createElement("li");
-        li.innerHTML = `${item.name} - ₹${item.price} x ${item.quantity} <button onclick="removeFromCart(${item.id})">Remove</button>`;
+        li.innerHTML = `${item.name} - ₹${item.price} x ${item.quantity} <button onclick="removeFromCart('${item._id}')">Remove</button>`;
         cartItemsList.appendChild(li);
     });
     document.getElementById("totalCost").innerText = totalCost;
@@ -123,7 +128,7 @@ function placeOrder() {
 
             // Clear cart after successful order
             cart = [];
-            updateCartDisplay();
+            updateCart();
             saveCart();
 
             alert('Order placed successfully!');
@@ -134,6 +139,8 @@ function placeOrder() {
     .catch(error => console.error('Error:', error));
 }
 
+let orderStatusInterval;
+
 async function updateOrderStatus(orderId) {
     const statusDiv = document.getElementById("orderStatus");
     if (!orderId) {
@@ -142,13 +149,17 @@ async function updateOrderStatus(orderId) {
     }
 
     try {
+        console.log('Fetching order status for orderId:', orderId);
         const response = await fetch(`/api/orders/${orderId}`);
         const order = await response.json();
         if (order) {
             statusDiv.innerText = `Order Status: ${order.status}`;
             // Set up polling to continuously update status
             if (orderId) {
-                setInterval(() => updateOrderStatus(orderId), 5000); // Poll every 5 seconds
+                if (orderStatusInterval) {
+                    clearInterval(orderStatusInterval);
+                }
+                orderStatusInterval = setInterval(() => updateOrderStatus(orderId), 5000); // Poll every 5 seconds
             }
         } else {
             statusDiv.innerText = "Order not found.";
@@ -162,28 +173,19 @@ async function updateOrderStatus(orderId) {
 // Search functionality
 function searchFood() {
     const searchQuery = document.getElementById("foodSearch").value.toLowerCase();
-    const filteredMenuItems = menuItems.filter(item => item.name.toLowerCase().includes(searchQuery));
-
-    const menuDiv = document.getElementById("menuItems");
-    menuDiv.innerHTML = ""; // Clear current menu display
-
-    if (filteredMenuItems.length > 0) {
-        filteredMenuItems.forEach(item => {
-            const div = document.createElement("div");
-            div.innerHTML = `
-                <h3>${item.name} - ₹${item.price}</h3>
-                <button onclick="addToCart(${item.id})">Add to Cart</button>
-            `;
-            menuDiv.appendChild(div);
-        });
+    const filteredMenuItems = menuItems.filter(item => item.name.toLowerCase().includes(searchQuery) || item.description.toLowerCase().includes(searchQuery) || item.category.toLowerCase().includes(searchQuery));
+    displayMenu(filteredMenuItems);
+    if (filteredMenuItems.length === 0) {
+        document.getElementById("searchResult").innerText = "No items found.";
     } else {
-        document.getElementById("searchResult").innerText = "Not available";
+        document.getElementById("searchResult").innerText = "";
     }
 }
 
 window.onload = () => {
     loadMenu();
     const lastOrderId = localStorage.getItem('lastOrderId');
+    console.log('lastOrderId from localStorage:', lastOrderId);
     if (lastOrderId) {
         updateOrderStatus(lastOrderId);
     }
