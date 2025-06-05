@@ -33,6 +33,31 @@
 
         <h2 style="color: rgb(179, 207, 201);">Order Status</h2>
         <div id="orderStatus" style="color: beige;"></div>
+
+        <button onclick="openFeedbackModal()" style="margin-top: 20px;">Leave Feedback</button>
+
+        <!-- Feedback Modal -->
+        <div id="feedbackModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeFeedbackModal()">&times;</span>
+                <h2>Leave Feedback</h2>
+                <form id="feedbackForm">
+                    <label for="dishName">Dish Name (Optional):</label>
+                    <input type="text" id="dishName" placeholder="Chicken Biryani">
+
+                    <label for="rating">Rating (1-5):</label>
+                    <input type="number" id="rating" min="1" max="5" required placeholder="Enter rating (1-5)">
+
+                    <label for="comment">Comment (Optional):</label>
+                    <textarea id="comment" rows="4" placeholder="Your feedback..."></textarea>
+
+                    <label for="customerName">Your Name (Optional):</label>
+                    <input type="text" id="customerName" placeholder="Your Name">
+
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

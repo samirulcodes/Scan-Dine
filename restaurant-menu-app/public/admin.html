@@ -15,10 +15,11 @@
             <button class="tab-button active" data-tab="orders">Received Orders</button>
             <button class="tab-button" data-tab="menu">Menu Management</button>
             <button class="tab-button" data-tab="sales">Sales Statistics</button>
+            <button class="tab-button" data-tab="feedback">Customer Feedback</button>
         </div>
 
         <div id="orders" class="tab-content active">
-            <h2>Received Orders</h2>
+            <h2 style="color: gray">Received Orders</h2>
             <div class="date-filter">
                 <label for="orderDate">Filter by Date:</label>
                 <input type="date" id="orderDate">
@@ -28,13 +29,13 @@
         </div>
 
         <div id="menu" class="tab-content">
-            <h2>Menu Management</h2>
+            <h2 style="color: gray">Menu Management</h2>
             <button id="addMenuItemBtn">Add New Menu Item</button>
             <div id="menu-items-container"></div>
         </div>
 
         <div id="sales" class="tab-content">
-            <h2>Sales Statistics</h2>
+            <h2 style="color: gray">Sales Statistics</h2>
             <div class="date-filter">
                 <label for="sales-period">Filter by:</label>
                 <select id="sales-period">
@@ -59,6 +60,11 @@
             <h2>Most Ordered Items</h2>
             <div id="top-items-data"></div>
         </div> -->
+
+        <div id="feedback" class="tab-content">
+            <h2 style="color: gray">Customer Feedback</h2>
+            <div id="feedback-container"></div>
+        </div>
 
     </div>
 

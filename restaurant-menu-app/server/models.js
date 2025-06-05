@@ -20,9 +20,15 @@ const menuItemSchema = new mongoose.Schema({
 
 const MenuItem = mongoose.model('MenuItem', menuItemSchema);
 
-module.exports = { Order, MenuItem };
+const feedbackSchema = new mongoose.Schema({
+    dishName: { type: String, required: false },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, required: true },
+    customerName: { type: String, required: false },
+    createdAt: { type: Date, default: Date.now }
+});
 
-
+const Feedback = mongoose.model('Feedback', feedbackSchema);
 
 // Explanation
 
@@ -42,10 +48,9 @@ module.exports = { Order, MenuItem };
     // const Order = mongoose.model('Order', orderSchema);
     // Creates an "Order" model using the schema. The model lets you interact with the orders collection in the database (MongoDB automatically pluralizes the name).
 
+module.exports = { Order, MenuItem, Feedback };
 
-
-module.exports = { Order, MenuItem };
-    // Makes the Order model available to other files. You can now use this model to:
-        // Add new orders to the database.
-        // Fetch orders.
-        // Update or delete orders.
+// Makes the Order model available to other files. You can now use this model to:
+    // Add new orders to the database.
+    // Fetch orders.
+    // Update or delete orders.

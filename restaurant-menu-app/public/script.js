@@ -182,12 +182,60 @@ function searchFood() {
     }
 }
 
+// Functions to open and close the feedback modal
+function openFeedbackModal() {
+    document.getElementById('feedbackModal').style.display = 'block';
+}
+
+function closeFeedbackModal() {
+    document.getElementById('feedbackModal').style.display = 'none';
+}
+
 window.onload = () => {
     loadMenu();
     const lastOrderId = localStorage.getItem('lastOrderId');
     console.log('lastOrderId from localStorage:', lastOrderId);
     if (lastOrderId) {
         updateOrderStatus(lastOrderId);
+    }
+
+    // Add event listener for feedback form submission
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const dishName = document.getElementById('dishName').value;
+            const rating = document.getElementById('rating').value;
+            const comment = document.getElementById('comment').value;
+            const customerName = document.getElementById('customerName').value;
+
+            if (!rating) {
+                alert('Please provide a rating.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ dishName, rating: parseInt(rating), comment, customerName }),
+                });
+
+                if (response.ok) {
+                    alert('Feedback submitted successfully!');
+                    feedbackForm.reset(); // Clear the form
+                    closeFeedbackModal(); // Close the modal after submission
+                } else {
+                    alert('Failed to submit feedback.');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                alert('Error submitting feedback.');
+            }
+        });
     }
 };
 

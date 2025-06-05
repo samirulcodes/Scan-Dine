@@ -219,6 +219,181 @@ ul {
     font-weight: bold;
 }
 
+/* Feedback Form Styles */
+.feedback-form-container {
+    background: rgba(36, 36, 36, 0.8);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#feedbackForm label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e0e0e0;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#feedbackForm input[type="text"],
+#feedbackForm input[type="number"],
+#feedbackForm textarea {
+    width: calc(100% - 22px); /* Account for padding and border */
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#feedbackForm input[type="text"]:focus,
+#feedbackForm input[type="number"]:focus,
+#feedbackForm textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+#feedbackForm textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#feedbackForm button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#feedbackForm button[type="submit"]:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+#feedbackForm button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Admin Page Specific Styles */
+.admin-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(24, 23, 23, 0.7);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+}
+
+.admin-container h1, .admin-container h2 {
+    color: #c1c5ca;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.order-list, .feedback-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feedback-item {
+    background: rgba(36, 36, 36, 0.8);
+    border: 1px solid #444;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    color: #e0e0e0; /* Darker color for better readability */
+}
+
+.feedback-item h3 {
+    color: #7cb342; /* Green for headings */
+    margin-top: 0;
+    margin-bottom: 10px;
+    flex-basis: 100%; /* Take full width */
+}
+
+.feedback-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.feedback-details p {
+    margin: 5px 0;
+    color: #e0e0e0; /* Changed to a lighter color for better visibility on dark background */
+    flex: 1 1 auto; /* Allow items to grow and shrink */
+    min-width: 150px; /* Ensure items don't get too small */
+}
+
+.feedback-item .rating {
+    font-weight: bold;
+    color: #ffc107; /* Yellow for rating */
+}
+
+.feedback-item .customer-name {
+    font-style: italic;
+    color: #90caf9; /* Light blue for name */
+}
+
+.feedback-item .dish-name {
+    font-weight: bold;
+    color: #f06292; /* Pink for dish name */
+}
+
+.feedback-item .comment {
+    border-left: 3px solid #66bb6a;
+    padding-left: 10px;
+    margin-top: 10px;
+    color: #c0c0c0;
+    flex-basis: 100%; /* Take full width */
+}
+
+.order-item ul {
+    list-style: disc;
+    margin-left: 20px;
+    color: #c0c0c0;
+}
+
+.order-item ul li {
+    margin-bottom: 3px;
+}
+
+.order-item button {
+    background-color: #007bff;
+    margin-right: 10px;
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+
+.order-item button:hover {
+    background-color: #0056b3;
+}
+
+
+#errorMessage {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
 /* Admin Panel Styles */
 
 /* Admin Panel Tabs */
@@ -240,7 +415,7 @@ ul {
     font-size: 18px;
     transition: background-color 0.3s ease, color 0.3s ease;
     border-radius: 5px; /* Slightly rounded corners for buttons */
-    width: 33%;
+    width: 24%;
     /* margin: 10 50px; Add some margin between buttons */
 }
 
@@ -328,78 +503,109 @@ ul {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 1000; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    padding-top: 60px;
+    background-color: rgba(0,0,0,0.6); /* Black w/ more opacity */
+    padding-top: 50px; /* Slightly less padding from top */
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 10px;
+    background-color: #2a2a2a; /* Darker background for modal content */
+    margin: 5% auto; /* Center the modal */
+    padding: 30px; /* More padding */
+    border: 1px solid #444; /* Darker border */
+    width: 90%; /* Wider on smaller screens */
+    max-width: 550px; /* Max width for larger screens */
+    border-radius: 12px; /* More rounded corners */
     position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5); /* More prominent shadow */
+    color: #e0e0e0; /* Light text color */
 }
 
 .close-button {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 32px; /* Larger close button */
     font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close-button:hover,
 .close-button:focus {
-    color: black;
+    color: #fff; /* White on hover */
     text-decoration: none;
-    cursor: pointer;
+}
+
+.modal-content h2 {
+    color: #7cb342; /* Green heading */
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2em;
 }
 
 .modal-content form label {
     display: block;
-    margin-bottom: 5px;
-    margin-top: 10px;
-    color: #333;
+    margin-bottom: 8px;
+    margin-top: 15px;
+    color: #e0e0e0;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 .modal-content form input[type="text"],
 .modal-content form input[type="number"],
 .modal-content form textarea {
-    width: calc(100% - 22px); /* Adjust for padding and border */
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
+    width: calc(100% - 24px); /* Adjust for padding and border */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background-color: #333;
+    color: #fff;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.modal-content form input[type="checkbox"] {
-    margin-top: 10px;
-    margin-bottom: 10px;
+.modal-content form input[type="text"]:focus,
+.modal-content form input[type="number"]:focus,
+.modal-content form textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.4);
+    outline: none;
+}
+
+.modal-content form textarea {
+    resize: vertical;
+    min-height: 100px;
 }
 
 .modal-content form button[type="submit"] {
     width: 100%;
-    padding: 10px;
+    padding: 15px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1.2em;
+    font-weight: bold;
     margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .modal-content form button[type="submit"]:hover {
     background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.modal-content form button[type="submit"]:active {
+    transform: translateY(0);
 }
 
 

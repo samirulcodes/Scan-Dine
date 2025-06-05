@@ -28,6 +28,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('fetch-sales-btn').addEventListener('click', fetchSalesData);
+
+    // Tab switching logic
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const tab = button.dataset.tab;
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            button.classList.add('active');
+            document.getElementById(tab).classList.add('active');
+
+            if (tab === 'feedback') {
+                fetchFeedback();
+            }
+        });
+    });
 });
 
 async function fetchSalesData() {
@@ -403,6 +418,64 @@ function closeModal() {
     }
 }
 
+// Feedback Management Functions
+async function fetchFeedback() {
+    const feedbackContainer = document.getElementById('feedback-container');
+    feedbackContainer.innerHTML = 'Loading feedback...';
+
+    try {
+        const response = await fetch('/api/feedback');
+        const feedback = await response.json();
+
+        feedbackContainer.innerHTML = ''; // Clear loading message
+
+        if (feedback.length === 0) {
+            feedbackContainer.innerHTML = '<p>No feedback found.</p>';
+            return;
+        }
+
+        feedback.forEach(f => {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'feedback-item';
+            feedbackDiv.innerHTML = `
+                 <h3>Dish: ${f.dishName}</h3>
+                 <div class="feedback-details">
+                     <p>Rating: <span class="rating">${f.rating} / 5</span></p>
+                     <p>Comment: <span class="comment">${f.comment}</span></p>
+                     <p>Customer: <span class="customer-name">${f.customerName}</span></p>
+                     <p>Submitted At: ${new Date(f.createdAt).toLocaleString()}</p>
+                 </div>
+                 <button class="delete-feedback" data-id="${f._id}">Delete</button>
+            `;
+            feedbackContainer.appendChild(feedbackDiv);
+        });
+
+        feedbackContainer.addEventListener('click', async (event) => {
+            if (event.target.classList.contains('delete-feedback')) {
+                const feedbackId = event.target.dataset.id;
+                if (confirm('Are you sure you want to delete this feedback?')) {
+                    try {
+                        const response = await fetch(`/api/feedback/${feedbackId}`, {
+                            method: 'DELETE',
+                        });
+                        if (response.ok) {
+                            alert('Feedback deleted successfully!');
+                            fetchFeedback(); // Refresh the feedback list
+                        } else {
+                            alert('Failed to delete feedback.');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting feedback:', error);
+                        alert('An error occurred while deleting feedback.');
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching feedback:', error);
+        feedbackContainer.innerHTML = '<p>Error loading feedback.</p>';
+    }
+}
 
 // Tab functionality
 document.addEventListener('DOMContentLoaded', () => {

@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/restaurant_db', {
     useNewUrlParser: true,
@@ -31,7 +33,7 @@ const orderSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const { Order, MenuItem } = require('./server/models');
+const { Order, MenuItem, Feedback } = require('./server/models');
 
 // API endpoint to save new order
 app.post('/api/orders', async (req, res) => {
@@ -118,6 +120,7 @@ app.delete('/api/orders/:id', async (req, res) => {
         }
         res.status(200).json({ message: 'Order deleted successfully' });
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -173,6 +176,7 @@ app.get('/api/sales', async (req, res) => {
 
         res.json(salesData);
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -197,6 +201,23 @@ app.get('/api/menu-items', async (req, res) => {
         const items = await MenuItem.find();
         res.json(items);
     } catch (error) {
+        console.error('Error deleting feedback:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// DELETE endpoint to delete feedback
+app.delete('/api/feedback/:id', async (req, res) => {
+    console.log(`Attempting to delete feedback with ID: ${req.params.id}`);
+    try {
+        const { id } = req.params;
+        const deletedFeedback = await Feedback.findByIdAndDelete(id);
+        if (!deletedFeedback) {
+            return res.status(404).json({ message: 'Feedback not found' });
+        }
+        res.status(200).json({ message: 'Feedback deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -210,6 +231,7 @@ app.get('/api/menu-items/:id', async (req, res) => {
         }
         res.json(item);
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -240,6 +262,7 @@ app.put('/api/menu-items/:id/availability', async (req, res) => {
         }
         res.status(200).json(updatedItem);
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -254,6 +277,7 @@ app.delete('/api/menu-items/:id', async (req, res) => {
         }
         res.status(200).json({ message: 'Menu item deleted successfully' });
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -264,6 +288,8 @@ app.get('/api/top-items', async (req, res) => {
         const { period, year, month } = req.query;
         let startDate;
         let endDate = new Date();
+
+
 
         if (year) {
             const parsedYear = parseInt(year);
@@ -310,6 +336,7 @@ app.get('/api/top-items', async (req, res) => {
 
         res.json(topItems);
     } catch (error) {
+        console.error('Error deleting feedback:', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -324,6 +351,33 @@ app.post('/api/login', (req, res) => {
         res.json({ success: true, message: 'Login successful!' });
     } else {
         res.status(401).json({ success: false, message: 'Invalid username or password.' });
+    }
+});
+
+// API endpoint to save feedback
+app.post('/api/feedback', async (req, res) => {
+    try {
+        const { dishName, rating, comment, customerName } = req.body;
+        if (!rating || !comment) {
+            return res.status(400).json({ message: 'Rating and comment are required.' });
+        }
+        const newFeedback = new Feedback({ dishName, rating, comment, customerName });
+        await newFeedback.save();
+        res.status(201).json({ message: 'Feedback submitted successfully', feedback: newFeedback });
+    } catch (error) {
+        console.error('Error saving feedback:', error);
+        res.status(500).json({ message: 'Failed to submit feedback' });
+    }
+});
+
+// API endpoint to get all feedback
+app.get('/api/feedback', async (req, res) => {
+    try {
+        const feedback = await Feedback.find().sort({ createdAt: -1 });
+        res.json(feedback);
+    } catch (error) {
+        console.error('Error fetching feedback:', error);
+        res.status(500).json({ message: 'Failed to fetch feedback' });
     }
 });
 
