@@ -424,7 +424,7 @@ ul {
 }
 
 .tab-button.active {
-    background-color: #007bff; /* Blue for active tab */
+    background-color: #6a9acd; /* Blue for active tab */
     color: white;
     font-weight: bold;
 }
@@ -868,5 +868,3 @@ ul {
         width: 100%;
     }
 }
-
-

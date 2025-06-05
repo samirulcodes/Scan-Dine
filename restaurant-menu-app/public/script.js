@@ -64,7 +64,7 @@ function displayMenu(itemsToDisplay) {
 
 function addToCart(id) {
     const item = menuItems.find(i => i._id === id);
-    const existingItem = cart.find(i => i.id === id);
+    const existingItem = cart.find(i => i._id === id);
 
     if (existingItem) {
         existingItem.quantity += 1;
