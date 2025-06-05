@@ -125,22 +125,43 @@ app.delete('/api/orders/:id', async (req, res) => {
 // API to get sales data
 app.get('/api/sales', async (req, res) => {
     try {
-        const { period } = req.query;
+        const { period, year, month } = req.query;
         let startDate;
-        const endDate = new Date();
+        let endDate = new Date();
 
-        switch (period) {
-            case 'week':
-                startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
-                break;
-            case 'month':
-                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
-                break;
-            case 'year':
-                startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
-                break;
-            default:
-                return res.status(400).json({ message: 'Invalid period specified' });
+        if (year) {
+            const parsedYear = parseInt(year);
+            if (isNaN(parsedYear)) {
+                return res.status(400).json({ message: 'Invalid year specified' });
+            }
+
+            if (month) {
+                const parsedMonth = parseInt(month) - 1; // Month is 0-indexed in JavaScript Date
+                if (isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
+                    return res.status(400).json({ message: 'Invalid month specified' });
+                }
+                startDate = new Date(parsedYear, parsedMonth, 1);
+                endDate = new Date(parsedYear, parsedMonth + 1, 0); // Last day of the month
+                endDate.setHours(23, 59, 59, 999); // Set to end of day
+            } else {
+                // Total sales for the year
+                startDate = new Date(parsedYear, 0, 1);
+                endDate = new Date(parsedYear, 11, 31, 23, 59, 59, 999);
+            }
+        } else {
+            switch (period) {
+                case 'week':
+                    startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+                    break;
+                case 'year':
+                    startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
+                    break;
+                default:
+                    return res.status(400).json({ message: 'Invalid period or missing year/month specified' });
+            }
         }
 
         const salesData = await Order.aggregate([
@@ -159,22 +180,43 @@ app.get('/api/sales', async (req, res) => {
 // API to get most ordered items
 app.get('/api/top-items', async (req, res) => {
     try {
-        const { period } = req.query;
+        const { period, year, month } = req.query;
         let startDate;
-        const endDate = new Date();
+        let endDate = new Date();
 
-        switch (period) {
-            case 'week':
-                startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
-                break;
-            case 'month':
-                startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
-                break;
-            case 'year':
-                startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
-                break;
-            default:
-                return res.status(400).json({ message: 'Invalid period specified' });
+        if (year) {
+            const parsedYear = parseInt(year);
+            if (isNaN(parsedYear)) {
+                return res.status(400).json({ message: 'Invalid year specified' });
+            }
+
+            if (month) {
+                const parsedMonth = parseInt(month) - 1; // Month is 0-indexed in JavaScript Date
+                if (isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
+                    return res.status(400).json({ message: 'Invalid month specified' });
+                }
+                startDate = new Date(parsedYear, parsedMonth, 1);
+                endDate = new Date(parsedYear, parsedMonth + 1, 0); // Last day of the month
+                endDate.setHours(23, 59, 59, 999); // Set to end of day
+            } else {
+                // Total sales for the year
+                startDate = new Date(parsedYear, 0, 1);
+                endDate = new Date(parsedYear, 11, 31, 23, 59, 59, 999);
+            }
+        } else {
+            switch (period) {
+                case 'week':
+                    startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate = new Date(endDate.getFullYear(), endDate.getMonth() - 1, endDate.getDate());
+                    break;
+                case 'year':
+                    startDate = new Date(endDate.getFullYear() - 1, endDate.getMonth(), endDate.getDate());
+                    break;
+                default:
+                    return res.status(400).json({ message: 'Invalid period or missing year/month specified' });
+            }
         }
 
         const topItems = await Order.aggregate([
@@ -192,6 +234,18 @@ app.get('/api/top-items', async (req, res) => {
 });
 
 // Start the server
+// Admin Login Endpoint
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Replace with your actual secure authentication logic (e.g., database lookup, hashed passwords)
+    if (username === 'admin' && password === 'admin123') { // Use strong, hashed passwords in production
+        res.json({ success: true, message: 'Login successful!' });
+    } else {
+        res.status(401).json({ success: false, message: 'Invalid username or password.' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

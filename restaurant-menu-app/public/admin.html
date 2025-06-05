@@ -9,6 +9,7 @@
 <body>
      <div class="admin-container">
         <h1>Admin Panel - Received Orders</h1>
+        <button id="logoutButton" style="position: absolute; top: 20px; right: 20px;">Logout</button>
         <div class="main-content-wrapper">
             <div class="admin-section orders-section">
                 <div class="date-filter">
@@ -28,7 +29,10 @@
                             <option value="week">Week</option>
                             <option value="month">Month</option>
                             <option value="year">Year</option>
+                            <option value="custom">Custom</option>
                         </select>
+                        <input type="number" id="sales-year" placeholder="Year (e.g., 2024)" style="display: none;">
+                        <input type="number" id="sales-month" placeholder="Month (1-12)" style="display: none;">
                         <button id="fetch-sales-btn">Fetch Sales</button>
                     </div>
                     <div id="sales-data"></div>
@@ -42,6 +46,14 @@
         </div>
     </div>
 
+    <script>
+        // Simple client-side check for authentication (replace with more robust solution)
+        // This is a placeholder. In a real application, you'd check for a session token or similar.
+        const isAuthenticated = localStorage.getItem('isAuthenticated'); // Example: check a flag set on successful login
+        if (!isAuthenticated) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <script src="admin.js"></script>
 </body>
 </html>

@@ -6,11 +6,33 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('orderDate').value = `${yyyy}-${mm}-${dd}`;
     fetchOrders();
 
+    // Logout functionality
+    document.getElementById('logoutButton').addEventListener('click', () => {
+        localStorage.removeItem('isAuthenticated');
+        window.location.href = 'login.html';
+    });
+
+    const salesPeriodSelect = document.getElementById('sales-period');
+    const salesYearInput = document.getElementById('sales-year');
+    const salesMonthInput = document.getElementById('sales-month');
+
+    salesPeriodSelect.addEventListener('change', () => {
+        if (salesPeriodSelect.value === 'custom') {
+            salesYearInput.style.display = 'inline-block';
+            salesMonthInput.style.display = 'inline-block';
+        } else {
+            salesYearInput.style.display = 'none';
+            salesMonthInput.style.display = 'none';
+        }
+    });
+
     document.getElementById('fetch-sales-btn').addEventListener('click', fetchSalesData);
 });
 
 async function fetchSalesData() {
     const salesPeriod = document.getElementById('sales-period').value;
+    const salesYear = document.getElementById('sales-year').value;
+    const salesMonth = document.getElementById('sales-month').value;
     const salesDataContainer = document.getElementById('sales-data');
     const topItemsDataContainer = document.getElementById('top-items-data');
 
@@ -18,11 +40,23 @@ async function fetchSalesData() {
     topItemsDataContainer.innerHTML = 'Loading top items data...';
 
     try {
-        const salesResponse = await fetch(`/api/sales?period=${salesPeriod}`);
+        let salesUrl = `/api/sales?period=${salesPeriod}`;
+        if (salesPeriod === 'custom') {
+            if (salesYear) salesUrl += `&year=${salesYear}`;
+            if (salesMonth) salesUrl += `&month=${salesMonth}`;
+        }
+
+        const salesResponse = await fetch(salesUrl);
         const sales = await salesResponse.json();
         displaySalesData(sales);
 
-        const topItemsResponse = await fetch(`/api/top-items?period=${salesPeriod}`);
+        let topItemsUrl = `/api/top-items?period=${salesPeriod}`;
+        if (salesPeriod === 'custom') {
+            if (salesYear) topItemsUrl += `&year=${salesYear}`;
+            if (salesMonth) topItemsUrl += `&month=${salesMonth}`;
+        }
+
+        const topItemsResponse = await fetch(topItemsUrl);
         const topItems = await topItemsResponse.json();
         displayTopItems(topItems);
 
