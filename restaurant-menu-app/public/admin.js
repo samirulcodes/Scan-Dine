@@ -367,3 +367,34 @@ function closeModal() {
         modal.remove();
     }
 }
+
+
+// Tab functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+
+            tabContents.forEach(content => {
+                if (content.id === targetTab) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+
+    // Initial load: ensure the active tab content is displayed
+    const initialActiveTab = document.querySelector('.tab-button.active');
+    if (initialActiveTab) {
+        const targetTab = initialActiveTab.dataset.tab;
+        document.getElementById(targetTab).classList.add('active');
+    }
+});

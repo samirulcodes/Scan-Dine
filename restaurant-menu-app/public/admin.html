@@ -7,49 +7,59 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-     <div class="admin-container">
-        <h1>Admin Panel - Received Orders</h1>
+    <div class="admin-container">
+        <h1>Admin Panel</h1>
         <button id="logoutButton" style="position: absolute; top: 20px; right: 20px;">Logout</button>
-        <div class="main-content-wrapper">
-            <div class="admin-section orders-section">
-                <div class="date-filter">
-                    <label for="orderDate">Filter by Date:</label>
-                    <input type="date" id="orderDate">
-                    <button onclick="fetchOrders()">Filter</button>
-                </div>
-                <div id="orders-container"></div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="orders">Received Orders</button>
+            <button class="tab-button" data-tab="menu">Menu Management</button>
+            <button class="tab-button" data-tab="sales">Sales Statistics</button>
+        </div>
+
+        <div id="orders" class="tab-content active">
+            <h2>Received Orders</h2>
+            <div class="date-filter">
+                <label for="orderDate">Filter by Date:</label>
+                <input type="date" id="orderDate">
+                <button onclick="fetchOrders()">Filter</button>
             </div>
+            <div id="orders-container"></div>
+        </div>
 
-            <div class="admin-section menu-management-section">
-                <h2>Menu Management</h2>
-                <button id="addMenuItemBtn">Add New Menu Item</button>
-                <div id="menu-items-container"></div>
+        <div id="menu" class="tab-content">
+            <h2>Menu Management</h2>
+            <button id="addMenuItemBtn">Add New Menu Item</button>
+            <div id="menu-items-container"></div>
+        </div>
+
+        <div id="sales" class="tab-content">
+            <h2>Sales Statistics</h2>
+            <div class="date-filter">
+                <label for="sales-period">Filter by:</label>
+                <select id="sales-period">
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                    <option value="custom">Custom</option>
+                </select>
+                <input type="number" id="sales-year" placeholder="Year (e.g., 2024)" style="display: none;">
+                <input type="number" id="sales-month" placeholder="Month (1-12)" style="display: none;">
+                <button id="fetch-sales-btn">Fetch Sales</button>
             </div>
+            <div id="sales-data"></div>
 
-            <div class="right-column">
-                <div class="admin-section sales-section">
-                    <h2>Sales Statistics</h2>
-                    <div class="date-filter">
-                        <label for="sales-period">Filter by:</label>
-                        <select id="sales-period">
-                            <option value="week">Week</option>
-                            <option value="month">Month</option>
-                            <option value="year">Year</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                        <input type="number" id="sales-year" placeholder="Year (e.g., 2024)" style="display: none;">
-                        <input type="number" id="sales-month" placeholder="Month (1-12)" style="display: none;">
-                        <button id="fetch-sales-btn">Fetch Sales</button>
-                    </div>
-                    <div id="sales-data"></div>
-                </div>
-
-                <div class="admin-section top-items-section">
-                    <h2>Most Ordered Items</h2>
-                    <div id="top-items-data"></div>
-                </div>
+            <div class="admin-section top-items-section">
+                <h2>Most Ordered Items</h2>
+                <div id="top-items-data"></div>
             </div>
         </div>
+
+        <!-- <div class="admin-section top-items-section">
+            <h2>Most Ordered Items</h2>
+            <div id="top-items-data"></div>
+        </div> -->
+
     </div>
 
     <script>

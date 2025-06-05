@@ -5,7 +5,7 @@ body {
     background: url('https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHx8MA%3D%3D') no-repeat center center fixed;
     background-size: cover;
     margin: 0;
-    color: #db9292; /* Changed to dark gray for better visibility */
+    color: #f7a6a6; /* Changed to dark gray for better visibility */
 }
 
 .admin-container {
@@ -221,6 +221,52 @@ ul {
 
 /* Admin Panel Styles */
 
+/* Admin Panel Tabs */
+.tab-container {
+    display: flex;
+    justify-content: space-between; /* Distribute items evenly with space between them */
+    margin-bottom: 20px;
+    background-color: #333; /* Dark background for the tab container */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.tab-button {
+    background-color: #555; /* Darker background for inactive tabs */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    padding: 12px 25px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 5px; /* Slightly rounded corners for buttons */
+    width: 33%;
+    /* margin: 10 50px; Add some margin between buttons */
+}
+
+.tab-button:hover {
+    background-color: #777; /* Lighter dark on hover */
+}
+
+.tab-button.active {
+    background-color: #007bff; /* Blue for active tab */
+    color: white;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background-color: #f9f9f9;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 .admin-section.menu-management-section {
     background-color: #7d7979;
     padding: 20px;
@@ -370,7 +416,7 @@ ul {
 .admin-container h1 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Add some space below the main title */
 }
 
 .admin-section {
@@ -383,7 +429,7 @@ ul {
 }
 
 .main-content-wrapper {
-    display: flex;
+    display: block; /* Ensure it's not flex if it was */
     flex-wrap: wrap; /* Allow wrapping for smaller screens */
     gap: 20px;
     justify-content: space-between; /* Distribute space between items */
@@ -398,7 +444,7 @@ ul {
 
 .right-column {
     flex: 1; /* Right column takes remaining space */
-    display: flex;
+    display: block; /* Ensure it's not flex if it was */
     flex-direction: column;
     gap: 20px;
     min-width: 300px; /* Ensure it doesn't get too small */
@@ -423,8 +469,10 @@ ul {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 15px;
+    /* padding: 15px; */ /* Removed */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0; /* Remove bottom margin as tabs will manage spacing */
+    padding: 0; /* Remove padding as tab-content will provide it */
 }
 
 .admin-section h2 {
