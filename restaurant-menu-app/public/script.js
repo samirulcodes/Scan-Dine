@@ -114,7 +114,10 @@ function placeOrder() {
     .then(response => response.json())
     .then(data => {
         alert('Order placed successfully!');
-        updateOrderStatus();
+        if (data.order && data.order._id) {
+            localStorage.setItem('lastOrderId', data.order._id);
+            updateOrderStatus(data.order._id);
+        }
         cart = [];
         totalCost = 0;
         updateCart();
@@ -122,14 +125,25 @@ function placeOrder() {
     .catch(error => console.error('Error:', error));
 }
 
-function updateOrderStatus() {
+async function updateOrderStatus(orderId) {
     const statusDiv = document.getElementById("orderStatus");
+    if (!orderId) {
+        statusDiv.innerText = "No active order.";
+        return;
+    }
 
-    statusDiv.innerText = "Food is preparing , wait for 10 minutes";
-    
-    setTimeout(() => {
-        statusDiv.innerText = "Food is ready!";
-    }, 100000);
+    try {
+        const response = await fetch(`/api/orders/${orderId}`);
+        const order = await response.json();
+        if (order) {
+            statusDiv.innerText = `Order Status: ${order.status}`;
+        } else {
+            statusDiv.innerText = "Order not found.";
+        }
+    } catch (error) {
+        console.error('Error fetching order status:', error);
+        statusDiv.innerText = "Error fetching order status.";
+    }
 }
 
 // Search functionality
@@ -154,7 +168,13 @@ function searchFood() {
     }
 }
 
-window.onload = loadMenu;
+window.onload = () => {
+    loadMenu();
+    const lastOrderId = localStorage.getItem('lastOrderId');
+    if (lastOrderId) {
+        updateOrderStatus(lastOrderId);
+    }
+};
 
 
 
