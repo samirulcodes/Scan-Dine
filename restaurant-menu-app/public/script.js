@@ -38,9 +38,9 @@ function displayMenu(itemsToDisplay) {
         specialItems.forEach(item => {
             const div = document.createElement("div");
             div.innerHTML = `
-                <h3 class="special">${item.name} - ₹${item.price}</h3>
+                <h3 class="special">${item.name} - ₹${item.price} ${item.available ? '' : '<span style="color: red; font-size: 0.8em;">(Not Available)</span>'}</h3>
                 <p>${item.description}</p>
-                <button onclick="addToCart('${item._id}')">Add to Cart</button>
+                <button ${item.available ? '' : 'disabled'} onclick="addToCart('${item._id}')">Add to Cart</button>
             `;
             menuDiv.appendChild(div);
         });
@@ -53,9 +53,9 @@ function displayMenu(itemsToDisplay) {
         regularItems.forEach(item => {
             const div = document.createElement("div");
             div.innerHTML = `
-                <h3>${item.name} - ₹${item.price}</h3>
+                <h3>${item.name} - ₹${item.price} ${item.available ? '' : '<span style="color: red; font-size: 0.8em;">(Out of Stock)</span>'}</h3>
                 <p>${item.description}</p>
-                <button onclick="addToCart('${item._id}')">Add to Cart</button>
+                <button ${item.available ? '' : 'disabled'} onclick="addToCart('${item._id}')">Add to Cart</button>
             `;
             menuDiv.appendChild(div);
         });

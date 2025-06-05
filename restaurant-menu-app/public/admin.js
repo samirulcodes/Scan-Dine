@@ -247,7 +247,10 @@ function displayMenuItems(items) {
             <p>${item.description}</p>
             <p>Price: $${item.price.toFixed(2)}</p>
             <p>Category: ${item.category}</p>
-            <p>Available: ${item.available ? 'Yes' : 'No'}</p>
+            <div class="menu-item-availability">
+                <input type="checkbox" id="item-available-${item._id}" class="item-available-checkbox" data-id="${item._id}" ${item.available ? 'checked' : ''}>
+                <label for="item-available-${item._id}">Available</label>
+            </div>
             <div class="menu-item-actions">
                 <button onclick="editMenuItem('${item._id}')">Edit</button>
                 <button onclick="deleteMenuItem('${item._id}')">Delete</button>
@@ -256,6 +259,38 @@ function displayMenuItems(items) {
         ul.appendChild(li);
     });
     menuItemsContainer.appendChild(ul);
+
+    // Add event listeners for availability checkboxes
+    document.querySelectorAll('.item-available-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', async (event) => {
+            const itemId = event.target.dataset.id;
+            const isAvailable = event.target.checked;
+            await updateMenuItemAvailability(itemId, isAvailable);
+        });
+    });
+}
+
+async function updateMenuItemAvailability(itemId, isAvailable) {
+    try {
+        const response = await fetch(`/api/menu-items/${itemId}/availability`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ available: isAvailable }),
+        });
+
+        if (response.ok) {
+            console.log(`Menu item ${itemId} availability updated to ${isAvailable}`);
+            // Optionally, refresh menu items to reflect changes, or update UI directly
+            // fetchMenuItems(); 
+        } else {
+            alert('Failed to update menu item availability.');
+        }
+    } catch (error) {
+        console.error('Error updating menu item availability:', error);
+        alert('Error updating menu item availability.');
+    }
 }
 
 function showMenuItemForm(item = {}) {

@@ -229,6 +229,22 @@ app.put('/api/menu-items/:id', async (req, res) => {
 });
 
 // Delete a menu item
+// Update menu item availability
+app.put('/api/menu-items/:id/availability', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { available } = req.body;
+        const updatedItem = await MenuItem.findByIdAndUpdate(id, { available }, { new: true });
+        if (!updatedItem) {
+            return res.status(404).json({ message: 'Menu item not found' });
+        }
+        res.status(200).json(updatedItem);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete a menu item
 app.delete('/api/menu-items/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -236,7 +252,7 @@ app.delete('/api/menu-items/:id', async (req, res) => {
         if (!deletedItem) {
             return res.status(404).json({ message: 'Menu item not found' });
         }
-        res.json({ message: 'Menu item deleted successfully' });
+        res.status(200).json({ message: 'Menu item deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
