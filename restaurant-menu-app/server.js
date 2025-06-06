@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,6 +11,7 @@ const MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/restaura
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 
 
