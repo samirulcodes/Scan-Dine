@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Define Order model
 const orderSchema = new mongoose.Schema({
-    tableNumber: Number,
+    tableNumber: String,
     cart: Array,
     status: { type: String, default: 'Preparing' }, // Add this line
     createdAt: { type: Date, default: Date.now },
