@@ -131,7 +131,14 @@ function placeOrder() {
             updateCart();
             saveCart();
 
+
             alert('Order placed successfully!');
+            document.getElementById('orderSuccessMessage').textContent = 'Order placed successfully!';
+            document.getElementById('orderStatus').textContent = 'Order placed successfully!';
+            setTimeout(() => {
+                document.getElementById('orderSuccessMessage').textContent = '';
+                document.getElementById('orderStatus').textContent = '';
+            }, 3000); // Clear message after 3 seconds
         } else {
             alert('Failed to place order.');
         }
@@ -191,8 +198,21 @@ function closeFeedbackModal() {
     document.getElementById('feedbackModal').style.display = 'none';
 }
 
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function loadCart() {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+        cart = JSON.parse(storedCart);
+        updateCart();
+    }
+}
+
 window.onload = () => {
     loadMenu();
+    loadCart(); // Load cart when the page loads
     const lastOrderId = localStorage.getItem('lastOrderId');
     console.log('lastOrderId from localStorage:', lastOrderId);
     if (lastOrderId) {
