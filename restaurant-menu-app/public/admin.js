@@ -287,7 +287,7 @@ function displayMenuItems(items) {
 
 async function updateMenuItemAvailability(itemId, isAvailable) {
     try {
-        const response = await fetch(`/api/menu-items/${itemId}/availability`, {
+        const response = await fetch(`https://scan-dine-syk0.onrender.com/api/menu-items/${itemId}/availability`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -351,7 +351,7 @@ function showMenuItemForm(item = {}) {
         const available = document.getElementById('itemAvailable').checked;
 
         const method = id ? 'PUT' : 'POST';
-        const url = id ? `/api/menu-items/${id}` : '/api/menu-items';
+        const url = id ? `https://scan-dine-syk0.onrender.com/api/menu-items/${id}` : 'https://scan-dine-syk0.onrender.com/api/menu-items';
 
         try {
             const response = await fetch(url, {

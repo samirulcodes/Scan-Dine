@@ -7,7 +7,7 @@ let menuItems = []; // This will now be populated from the API
 function generateQRCode() {
     const tableNumber = document.getElementById("tableNumber").value;
     if (tableNumber) {
-        const url = `http://localhost:3000/menu.html?table=${tableNumber}`;
+        const url = `https://scan-dine-syk0.onrender.com/menu.html?table=${tableNumber}`;
         $('#qrCode').empty().qrcode(url);
     } else {
         alert("Please enter a valid table number.");
@@ -16,7 +16,7 @@ function generateQRCode() {
 
 async function loadMenu() {
     try {
-        const response = await fetch('/api/menu-items');
+        const response = await fetch('https://scan-dine-syk0.onrender.com/api/menu-items');
         menuItems = await response.json();
         displayMenu(menuItems);
     } catch (error) {
@@ -111,7 +111,7 @@ function placeOrder() {
         return;
     }
 
-    fetch('/api/orders', {
+    fetch('https://scan-dine-syk0.onrender.com/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tableNumber, cart }),
@@ -150,7 +150,7 @@ async function updateOrderStatus(orderId) {
 
     try {
         console.log('Fetching order status for orderId:', orderId);
-        const response = await fetch(`/api/orders/${orderId}`);
+        const response = await fetch(`https://scan-dine-syk0.onrender.com/api/orders/${orderId}`);
         const order = await response.json();
         if (order) {
             statusDiv.innerText = `Order Status: ${order.status}`;

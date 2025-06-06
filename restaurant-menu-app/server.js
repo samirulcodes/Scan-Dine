@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,6 +6,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/restaurant_db';
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -12,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/restaurant_db', {
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
